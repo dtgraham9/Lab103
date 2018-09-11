@@ -1,3 +1,6 @@
+
+import java.util.Random;
+
 /**
  *
  * @author Graham Thompson
@@ -43,7 +46,14 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public void add(T num) {
+        if(this.count == this.list.length){
+            T[] temp = (T[]) new Object[this.list.length*2];
+            temp[this.count++] = num;
+            this.list = temp;
+            temp = null;
+        }
         
+        this.list[this.count++] = num;
     }
 
     /**
@@ -54,7 +64,26 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public boolean remove(T num) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int i = 0;
+        while(!(this.list[i].equals(num)) && i < this.count){
+            i++;
+        }
+        if((this.list.length-1) == i){
+            this.list[i] = null;
+            this.count--;
+            return true;
+    }
+        else if(this.list.length == i){
+            return false;
+        }
+        else{
+            for(int y = i; y < this.list.length-1; y++){
+                this.list[y] = this.list[y+1];
+            }
+            this.count--;
+            return true;
+        }
+        
     }
 
     /**
@@ -64,7 +93,15 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public T remove() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Random rand = new Random();
+        int index = rand.nextInt(this.count);
+        T temp = this.list[index];
+        this.list[index] = null;
+        for(int y = index; y < this.count-1; y++){
+                this.list[y] = this.list[y+1];
+            }
+            this.count--;
+        return temp;
     }
 
     /**
@@ -72,7 +109,10 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public void clear() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        for(int i = this.count-1; i>=0; i--){
+            this.list[i] = null;
+        }
+        this.count=0;
     }
 
     /**
@@ -83,7 +123,13 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public int getFrequency(T num) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int instances = 0;
+        int i = 0;
+        while(i < this.count){
+            instances = num.equals(this.list[i]) ? instances+1 : instances;
+            i++;
+        }
+        return instances;
     }
 
     /**
@@ -94,7 +140,14 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public boolean contains(T num) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int i = 0;
+        while(i < this.count){
+            if(num.equals(this.list[i])){
+                return true;
+            }
+            i++;
+        }
+        return false;
     }
     
     /**
@@ -103,7 +156,12 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public String toString(){
-        
+        String print = "";
+        for(int i = 0; this.count-1 > i; i++){
+            print += this.list[i].toString() + "; ";
+        }
+        print += this.list[this.count].toString();
+        return print;
     }
     
     /**
@@ -114,7 +172,37 @@ public class ArrayBag <T> implements Bag<T>{
      */
     @Override
     public boolean equals(Object o){
-        
+        if(!(o instanceof ArrayBag)){
+            return false;
+        }
+        else{
+            ArrayBag a = (ArrayBag) o;
+            if(!(this.count == a.count)){
+                return false;
+            }
+            
+           for(int i = 0; i < this.count; i++){
+               if(!(this.list[i].equals(a.list[i]))){
+                   return false;
+               }
+           }
+           return true;
+        }
+    }
+    
+    /**
+     * returns T at i index, but if not returns null
+     * if index is inside the currently filled section of array
+     * @param i
+     * @return 
+     */
+    public T get(int i){
+        if(0 <= i && i<=(this.count-1)){
+            return this.list[i];
+        }
+        else{
+            return null;
+        }
     }
     
 }
