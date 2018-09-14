@@ -151,4 +151,12 @@ public class LinkedBag<T> implements Bag<T>{
         return print;
     }
     
+    public T getIndex(int num){
+        Node current = head;
+        for(int i = 0; i<num;i++){
+            current = current.getNext();
+        }
+        return (T) current.getElement();
+    }
+    
 }
