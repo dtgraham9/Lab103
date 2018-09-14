@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class ArrayBag <T> implements Bag<T>{
 
-    private T[] list;
+    public T[] list;
     private int count;
     
     
@@ -48,12 +48,17 @@ public class ArrayBag <T> implements Bag<T>{
     public void add(T num) {
         if(this.count == this.list.length){
             T[] temp = (T[]) new Object[this.list.length*2];
+            for(int i = 0; i < this.list.length; i++){
+                temp[i] = this.list[i];
+            }
             temp[this.count++] = num;
             this.list = temp;
-            temp = null;
         }
         
-        this.list[this.count++] = num;
+        else{
+            this.list[this.count++] = num;
+        }
+        
     }
 
     /**
@@ -87,10 +92,10 @@ public class ArrayBag <T> implements Bag<T>{
     }
 
     /**
-     * removes a randomly selected selected entry 
-     * from the bag
-     * @return 
-     */
+    * removes a randomly selected selected entry 
+    * from the bag
+    * @return 
+    */
     @Override
     public T remove() {
         Random rand = new Random();
@@ -160,7 +165,7 @@ public class ArrayBag <T> implements Bag<T>{
         for(int i = 0; this.count-1 > i; i++){
             print += this.list[i].toString() + "; ";
         }
-        print += this.list[this.count].toString();
+        print += this.list[this.count-1].toString();
         return print;
     }
     
